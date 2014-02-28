@@ -197,7 +197,7 @@ describe('echo server test suite', function () {
         // release port for subsequent tests
         server.close();
 
-        assert.equal(echo, message);
+        assert.equal(echo.messages[0], message);
         done();
       });
 
@@ -212,7 +212,7 @@ describe('echo server test suite', function () {
     var count = 200;
     var max = count > 100 ? 100 : count;
 
-    // prepare an array with max messages
+    // prepare an array with all the messages
     var messages = _.range(count).map(function (val) { return 'message-' + val });
 
     var server = new echo.Server(port);
@@ -226,23 +226,25 @@ describe('echo server test suite', function () {
         i++;
 
         if (i == count) {
+          // all the messages have been sent
           client.sendHistoryCommand();
         }
 
         if (i > count) {
-          // this is the history
-          var history = JSON.parse(message);
-          console.log(history);
+          // after all of the echoes, this is the history message
+          var history = message.messages;
+          // console.log(message);
 
           assert.equal(history.length, max);
 
-          // compare history to input
+          // compare history to sent messages
           for (i = 0; i < max; i++) {
             var actual = history[i];
             var expected = messages[messages.length - i - 1];
             assert(actual, expected);
           }
 
+          server.close();
           done();
         }
       });
@@ -257,22 +259,129 @@ describe('echo server test suite', function () {
 
 });
 
-describe.skip('echo client test suite', function () {
+describe('echo client test suite', function () {
+
+  it('should report error when unable to connect', function (done) {
+    var message = 'hello';
+    var client = new echo.Client(uri);
+
+    client.on('error', function(err) {
+      assert.equal(err.code, 'ECONNREFUSED');
+      done();
+    });
+  });
 
   it('should send messages on specified port', function (done) {
-    done(notImplementedError);
+    var message = 'hello';
+
+    var server = new echo.Server(port);
+    var client = new echo.Client(uri);
+
+    server.start(function (err) {
+      if (err) return done(err);
+
+      client.on('message', function (echo) {
+        // release port for subsequent tests
+        server.close();
+
+        assert.equal(echo.messages[0], message);
+        done();
+      });
+
+      client.on('open', function () {
+        client.send(message);
+      });
+    });
   });
 
   it('should return server response plus response time', function (done) {
-    done(notImplementedError);
-  });
+    var message = 'hello';
 
-  it('should return message history from server', function (done) {
-    done(notImplementedError);
+    var server = new echo.Server(port);
+    var client = new echo.Client(uri);
+
+    server.start(function (err) {
+      if (err) return done(err);
+
+      client.on('message', function (echo) {
+        // release port for subsequent tests
+        server.close();
+
+        assert.equal(echo.messages[0], message);
+        assert.equal(typeof echo.responseTime, 'number');
+        assert(echo.responseTime >= 0);
+
+        done();
+      });
+
+      client.on('open', function () {
+        client.send(message);
+      });
+    });
   });
 
   it('should be able to filter message history', function (done) {
-    done(notImplementedError);
+    // prepare an array with all the messages
+    var messages = [
+      'how now brown cow',
+      'hello world',
+      'silly sally sells seashells by the seashore',
+      'goodbye cruel world'
+    ];
+
+    var count = messages.length;
+
+    var server = new echo.Server(port);
+    var client = new echo.Client(uri);
+
+    server.start(function (err) {
+      if (err) return done(err);
+      var i = 0;
+
+      client.on('message', function (message) {
+        var actual, expected, filtered;
+
+        i++;
+
+        if (i == count) {
+          // all the messages have been sent
+          client.sendHistoryCommand();
+        }
+
+        if (i > count) {
+          // after all of the echoes, this is the history message
+          var history = message.messages;
+          // console.log(message);
+
+          // compare history to sent messages
+          for (i = 0; i < count; i++) {
+            actual = history[i];
+            expected = messages[messages.length - i - 1];
+            assert(actual, expected);
+          }
+
+          filtered = client.historyFilter('e').messages;
+          assert(filtered[0], messages[3]);
+          assert(filtered[1], messages[2]);
+          assert(filtered[2], messages[1]);
+
+          filtered = client.historyFilter('BROWN').messages;
+          assert(filtered[0], messages[0]);
+
+          filtered = client.historyFilter('kitty').messages;
+          assert.equal(filtered.length, 0);
+
+          server.close();
+          done();
+        }
+      });
+
+      client.on('open', function () {
+        _.each(messages, function(message) {
+          client.send(message);
+        });
+      });
+    });
   });
 
 });
