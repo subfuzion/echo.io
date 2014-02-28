@@ -1,6 +1,6 @@
 {
   "name": "echo.io",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "An echo server for Node that uses Socket.io and saves message history.",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,6 @@
     "underscore": "~1.6.0"
   },
   "dependencies": {
-    "nconf": "~0.6.9",
     "ws": "~0.4.31"
   }
 }
