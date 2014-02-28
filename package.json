@@ -22,7 +22,8 @@
   },
   "homepage": "https://github.com/tonypujals/echo.io",
   "devDependencies": {
-    "mocha": "~1.17.1"
+    "mocha": "~1.17.1",
+    "underscore": "~1.6.0"
   },
   "dependencies": {
     "nconf": "~0.6.9",
