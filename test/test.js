@@ -156,8 +156,8 @@ describe('ring buffer test suite', function () {
 describe('echo server test suite', function () {
 
   it('should start on specified TCP port', function (done) {
-    var server = new echo.Server(port);
-    server.start(function (err) {
+    var server = new echo.Server();
+    server.start(port, function (err) {
       // release port for subsequent tests
       if (!err) server.close();
       done(err);
@@ -165,19 +165,20 @@ describe('echo server test suite', function () {
   });
 
   it('should callback with an error when the address is in use', function (done) {
-    var server = new echo.Server(port);
+    var server = new echo.Server();
 
-    server.start(function (err) {
+    server.start(port, function (err) {
       if (err) return done(err);
 
       // server started ok
       // confirm that we can't start another server on the same port
-      var server2 = new echo.Server(port);
-      server2.start(function (err) {
+      var server2 = new echo.Server();
+      server2.start(port, function (err) {
         // release port for subsequent tests
         server.close();
 
         // expected a callback error
+        assert(err);
         assert.equal(err.code, 'EADDRINUSE');
         done();
       })
@@ -187,10 +188,10 @@ describe('echo server test suite', function () {
   it('should echo received messages', function (done) {
     var message = 'hello';
 
-    var server = new echo.Server(port);
+    var server = new echo.Server();
     var client = new echo.Client(uri);
 
-    server.start(function (err) {
+    server.start(port, function (err) {
       if (err) return done(err);
 
       client.on('message', function (echo) {
@@ -215,10 +216,10 @@ describe('echo server test suite', function () {
     // prepare an array with all the messages
     var messages = _.range(count).map(function (val) { return 'message-' + val });
 
-    var server = new echo.Server(port);
+    var server = new echo.Server();
     var client = new echo.Client(uri);
 
-    server.start(function (err) {
+    server.start(port, function (err) {
       if (err) return done(err);
       var i = 0;
 
@@ -274,10 +275,10 @@ describe('echo client test suite', function () {
   it('should send messages on specified port', function (done) {
     var message = 'hello';
 
-    var server = new echo.Server(port);
+    var server = new echo.Server();
     var client = new echo.Client(uri);
 
-    server.start(function (err) {
+    server.start(port, function (err) {
       if (err) return done(err);
 
       client.on('message', function (echo) {
@@ -297,10 +298,10 @@ describe('echo client test suite', function () {
   it('should return server response plus response time', function (done) {
     var message = 'hello';
 
-    var server = new echo.Server(port);
+    var server = new echo.Server();
     var client = new echo.Client(uri);
 
-    server.start(function (err) {
+    server.start(port, function (err) {
       if (err) return done(err);
 
       client.on('message', function (echo) {
@@ -331,10 +332,10 @@ describe('echo client test suite', function () {
 
     var count = messages.length;
 
-    var server = new echo.Server(port);
+    var server = new echo.Server();
     var client = new echo.Client(uri);
 
-    server.start(function (err) {
+    server.start(port, function (err) {
       if (err) return done(err);
       var i = 0;
 
