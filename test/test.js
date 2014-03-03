@@ -199,6 +199,9 @@ describe('echo server test suite', function () {
         server.close();
 
         assert.equal(echo.messages[0], message);
+
+        assert.equal(echo.type, 'message');
+
         done();
       });
 
@@ -237,6 +240,8 @@ describe('echo server test suite', function () {
           // console.log(message);
 
           assert.equal(history.length, max);
+
+          assert.equal(message.type, 'history');
 
           // compare history to sent messages
           for (i = 0; i < max; i++) {
