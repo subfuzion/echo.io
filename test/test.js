@@ -157,32 +157,77 @@ describe('echo server test suite', function () {
 
   it('should start on specified TCP port', function (done) {
     var server = new echo.Server();
-    server.start(port, function (err) {
-      // release port for subsequent tests
-      if (!err) server.close();
+
+    server.on('error', function(err) {
       done(err);
     });
+
+    server.on('listening', function(port_) {
+      assert(port_, port);
+
+      // release port for subsequent tests
+      server.close();
+
+      done();
+    });
+
+    server.start(port);
+  });
+
+  it('should emit a close event when closed', function (done) {
+    var server = new echo.Server();
+
+    server.on('error', function(err) {
+      done(err);
+    });
+
+    // the test will fail by timing out if 'close' is never emitted
+    server.on('close', function(closedPort) {
+      assert(closedPort, port);
+      done();
+    });
+
+    server.on('listening', function() {
+      // release port for subsequent tests
+      server.close();
+    });
+
+    server.start(port);
   });
 
   it('should callback with an error when the address is in use', function (done) {
-    var server = new echo.Server();
+    var server1 = new echo.Server();
 
-    server.start(port, function (err) {
-      if (err) return done(err);
+    server1.on('error', function(err) {
+      done(err);
+    });
 
-      // server started ok
+    server1.on('listening', function(port1) {
       // confirm that we can't start another server on the same port
       var server2 = new echo.Server();
-      server2.start(port, function (err) {
-        // release port for subsequent tests
-        server.close();
 
-        // expected a callback error
-        assert(err);
+      server2.on('error', function(err) {
+        // release port for subsequent tests
+        server1.close();
+
+        // expected an error -- shouldn't be able to use the same port
         assert.equal(err.code, 'EADDRINUSE');
         done();
-      })
+      });
+
+      server2.on('listening', function(port2) {
+        // release port for subsequent tests
+        server1.close();
+        server2.close();
+
+        assert.fail(port2, port1, 'should not be able to start server on the same port');
+        done();
+      });
+
+      server2.start(port);
     });
+
+    server1.start(port);
   });
 
   it('should echo received messages', function (done) {
@@ -191,25 +236,27 @@ describe('echo server test suite', function () {
     var server = new echo.Server();
     var client = new echo.Client(uri);
 
-    server.start(port, function (err) {
-      if (err) return done(err);
+    server.on('error', function(err) {
+      done(err);
+    });
+
+    server.on('listening', function() {
+      client.on('open', function () {
+        client.send(message);
+      });
 
       client.on('message', function (echo) {
         // release port for subsequent tests
         server.close();
 
         assert.equal(echo.messages[0], message);
-
         assert.equal(echo.type, 'message');
 
         done();
       });
-
-      client.on('open', function () {
-        client.send(message);
-      });
     });
 
+    server.start(port);
   });
 
   it('should process HISTORY command to return message history', function (done) {
@@ -222,9 +269,18 @@ describe('echo server test suite', function () {
     var server = new echo.Server();
     var client = new echo.Client(uri);
 
-    server.start(port, function (err) {
-      if (err) return done(err);
+    server.on('error', function(err) {
+      done(err);
+    });
+
+    server.on('listening', function() {
       var i = 0;
+
+      client.on('open', function () {
+        _.each(messages, function(message) {
+          client.send(message);
+        });
+      });
 
       client.on('message', function (message) {
         i++;
@@ -254,15 +310,10 @@ describe('echo server test suite', function () {
           done();
         }
       });
-
-      client.on('open', function () {
-        _.each(messages, function(message) {
-          client.send(message);
-        });
-      });
     });
-  });
 
+    server.start(port);
+  });
 });
 
 describe('echo client test suite', function () {
@@ -283,9 +334,11 @@ describe('echo client test suite', function () {
     var server = new echo.Server();
     var client = new echo.Client(uri);
 
-    server.start(port, function (err) {
-      if (err) return done(err);
+    server.on('error', function(err) {
+      done(err);
+    });
 
+    server.on('listening', function() {
       client.on('message', function (echo) {
         // release port for subsequent tests
         server.close();
@@ -298,6 +351,8 @@ describe('echo client test suite', function () {
         client.send(message);
       });
     });
+
+    server.start(port);
   });
 
   it('should return server response plus response time', function (done) {
@@ -306,9 +361,11 @@ describe('echo client test suite', function () {
     var server = new echo.Server();
     var client = new echo.Client(uri);
 
-    server.start(port, function (err) {
-      if (err) return done(err);
+    server.on('error', function(err) {
+      done(err);
+    });
 
+    server.on('listening', function() {
       client.on('message', function (echo) {
         // release port for subsequent tests
         server.close();
@@ -324,6 +381,8 @@ describe('echo client test suite', function () {
         client.send(message);
       });
     });
+
+    server.start(port);
   });
 
   it('should be able to filter message history', function (done) {
@@ -340,9 +399,18 @@ describe('echo client test suite', function () {
     var server = new echo.Server();
     var client = new echo.Client(uri);
 
-    server.start(port, function (err) {
-      if (err) return done(err);
+    server.on('error', function(err) {
+      done(err);
+    });
+
+    server.on('listening', function() {
       var i = 0;
+
+      client.on('open', function () {
+        _.each(messages, function(message) {
+          client.send(message);
+        });
+      });
 
       client.on('message', function (message) {
         var actual, expected, filtered;
@@ -381,13 +449,9 @@ describe('echo client test suite', function () {
           done();
         }
       });
-
-      client.on('open', function () {
-        _.each(messages, function(message) {
-          client.send(message);
-        });
-      });
     });
+
+    server.start(port);
   });
 
 });
