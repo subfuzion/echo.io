@@ -1,6 +1,6 @@
 {
   "name": "echo.io",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "An echo server for Node that uses Socket.io and saves message history.",
   "main": "index.js",
   "scripts": {
