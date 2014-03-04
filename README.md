@@ -16,7 +16,7 @@ The echo.io server accepts simple string messages, but it returns messages in `J
 Installation
 ============
 
-The latest version is v0.0.5
+The latest version is v0.0.6
 
     npm install git://github.com/tonypujals/echo.io.git#v0.0.5 --save
 
@@ -223,12 +223,12 @@ The `messages` property contains an array of one or more messages (in the case o
 Tests
 =====
 
-You can run [mocha](http://visionmedia.github.io/mocha/) tests:
+You can run [mocha](http://visionmedia.github.io/mocha/) tests. Mocha is installed as a dev dependency with the package.
 
 ```
 $ npm test
 
-or
+or if you already have mocha installed on your system:
 
 $ mocha
 ```
