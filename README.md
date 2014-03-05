@@ -18,7 +18,7 @@ Installation
 
 The latest version is v0.0.6
 
-    npm install git://github.com/tonypujals/echo.io.git#v0.0.5 --save
+    npm install git://github.com/tonypujals/echo.io.git#v0.0.6 --save
 
 
 
