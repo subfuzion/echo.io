@@ -16,9 +16,9 @@ The echo.io server accepts simple string messages, but it returns messages in `J
 Installation
 ============
 
-The latest version is v0.0.6
+The latest version is v0.0.7
 
-    npm install git://github.com/tonypujals/echo.io.git#v0.0.6 --save
+    npm install git://github.com/tonypujals/echo.io.git#v0.0.7 --save
 
 
 
