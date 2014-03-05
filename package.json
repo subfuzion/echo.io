@@ -4,7 +4,7 @@
   "description": "An echo server for Node that uses Socket.io and saves message history.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --reporter spec"
   },
   "repository": {
     "type": "git",
