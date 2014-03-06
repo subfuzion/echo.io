@@ -240,3 +240,8 @@ $ mocha
 ```
 
 The test server will run on port 5555.
+
+A screenshot of the current tests:
+
+![test screenshot](https://github.com/tonypujals/echo.io/screenshot.png "test screenshot")
+
