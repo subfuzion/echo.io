@@ -16,13 +16,10 @@ The echo.io server accepts simple string messages, but it returns messages in `J
 Installation
 ============
 
-The latest version is v0.0.8
+The latest version is v0.0.6
 
-    npm install git://github.com/tonypujals/echo.io.git#v0.0.8 --save
+    npm install git://github.com/tonypujals/echo.io.git#v0.0.6 --save
 
-or just
-
-    npm install git://github.com/tonypujals/echo.io.git --save
 
 
 How to use it
@@ -221,6 +218,12 @@ The server sends `JSON` messages to clients.
 The `type` property indicates whether the message is a normal `message` or a `history` message in response to the `[HISTORY]` command.
 
 The `messages` property contains an array of one or more messages (in the case of a 'history' type). The messages are sorted in *newest-to-oldest* order. The most recent message is always at `messages[0]`. Currently the message history maximum is 100 messages.
+
+
+Implementation details
+======================
+
+**echo.io** uses the [ws](https://www.npmjs.org/package/ws) package for the underlying WebSocket support.
 
 
 Tests
