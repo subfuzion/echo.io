@@ -2,7 +2,7 @@
   "name": "echo.io",
   "version": "0.0.8",
   "description": "An echo server for Node that uses Socket.io and saves message history.",
-  "main": "index.js",
+  "main": "./lib/index.js",
   "scripts": {
     "test": "mocha --reporter spec"
   },
