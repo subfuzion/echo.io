@@ -1,5 +1,5 @@
 echo.io
--------
+=======
 
 [![Build Status](https://drone.io/github.com/tonypujals/echo.io/status.png)](https://drone.io/github.com/tonypujals/echo.io/latest)
 
@@ -16,8 +16,13 @@ For more details, see the following links.
 
 The echo.io server accepts simple string messages, but it returns messages in `JSON` format.  For details, see the **Protocol** section below.
 
+Demo
+----
+
+A live demo that uses echo.io: [http://echo.nodester.io](http://echo.nodester.io) ([source](https://github.com/tonypujals/echo)].
+
 Installation
-============
+------------
 
 The latest version is v0.0.6
 
@@ -26,7 +31,7 @@ The latest version is v0.0.6
 
 
 How to use it
-=============
+-------------
 
 A server can be opened on ports in the range of 1024 - 65535.
 
@@ -118,7 +123,7 @@ console.on('close', function(port) {
 ```
 
 Communicating with the Server
-=============================
+-----------------------------
 
 You can communicate with the server using WebSockets.
 
@@ -199,7 +204,8 @@ The message that would be printed out in response to the message event would loo
 ```
 
 Protocol
-========
+--------
+
 The echo.io server accepts simple string messages, but it returns messages in `JSON` format.
 
 #### Client message
@@ -224,13 +230,13 @@ The `messages` property contains an array of one or more messages (in the case o
 
 
 Implementation details
-======================
+----------------------
 
 **echo.io** uses the [ws](https://www.npmjs.org/package/ws) package for the underlying WebSocket support.
 
 
 Tests
-=====
+-----
 
 You can run [mocha](http://visionmedia.github.io/mocha/) tests. Mocha is installed as a dev dependency with the package.
 
