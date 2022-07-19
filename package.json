@@ -1,6 +1,6 @@
 {
   "name": "echo.io",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An echo server for Node that uses Socket.io and saves message history.",
   "author": "Tony Pujals (http://twitter.com/subfuzion)",
   "license": "MIT",

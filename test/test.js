@@ -121,7 +121,7 @@ describe('echo server test suite', function () {
         server.close();
 
         assert.equal(echo.type, 'message');
-        assert.equal(echo.message, message);
+        assert.equal(echo.messages[0], message);
 
         done();
       });
@@ -211,7 +211,7 @@ describe('echo client test suite', function () {
         // release port for subsequent tests
         server.close();
 
-        assert.equal(echo.message, message);
+        assert.equal(echo.messages[0], message);
         done();
       });
 
@@ -238,7 +238,7 @@ describe('echo client test suite', function () {
         // release port for subsequent tests
         server.close();
 
-        assert.equal(echo.message, message);
+        assert.equal(echo.messages[0], message);
         assert.equal(typeof echo.responseTime, 'number');
         assert(echo.responseTime >= 0);
 
