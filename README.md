@@ -1,9 +1,6 @@
 echo.io
 =======
 
-[![Build Status](https://drone.io/github.com/tonypujals/echo.io/status.png)](https://drone.io/github.com/tonypujals/echo.io/latest)
-
-
 A Node.js WebSocket server that echoes its messages and responds to history requests. A client and tests are also provided.
 
 In a nutshell, the server responds to every message by echoing it back to the client. It also responds to the `[HISTORY]` command by returning the last 100 messages in the message history.
