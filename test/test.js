@@ -19,10 +19,7 @@ describe('echo server test suite', function () {
 
     server.on('listening', function(port_) {
       assert(port_, port);
-
-      // release port for subsequent tests
       server.close();
-
       done();
     });
 
@@ -93,8 +90,8 @@ describe('echo server test suite', function () {
     });
 
     server.on('connection', function() {
-        server.close();
-	done();
+      server.close();
+      done();
     });
 
     server.on('listening', function() {
@@ -123,8 +120,8 @@ describe('echo server test suite', function () {
         // release port for subsequent tests
         server.close();
 
-        assert.equal(echo.messages[0], message);
         assert.equal(echo.type, 'message');
+        assert.equal(echo.message, message);
 
         done();
       });
@@ -167,11 +164,8 @@ describe('echo server test suite', function () {
         if (i > count) {
           // after all of the echoes, this is the history message
           var history = message.messages;
-          // console.log(message);
-
-          assert.equal(history.length, max);
-
           assert.equal(message.type, 'history');
+          assert.equal(history.length, max);
 
           // compare history to sent messages
           for (i = 0; i < max; i++) {
@@ -217,7 +211,7 @@ describe('echo client test suite', function () {
         // release port for subsequent tests
         server.close();
 
-        assert.equal(echo.messages[0], message);
+        assert.equal(echo.message, message);
         done();
       });
 
@@ -244,7 +238,7 @@ describe('echo client test suite', function () {
         // release port for subsequent tests
         server.close();
 
-        assert.equal(echo.messages[0], message);
+        assert.equal(echo.message, message);
         assert.equal(typeof echo.responseTime, 'number');
         assert(echo.responseTime >= 0);
 
@@ -291,7 +285,7 @@ describe('echo client test suite', function () {
 
         i++;
 
-        if (i == count) {
+        if (i === count) {
           // all the messages have been sent
           client.sendHistoryCommand();
         }
@@ -329,4 +323,3 @@ describe('echo client test suite', function () {
   });
 
 });
-

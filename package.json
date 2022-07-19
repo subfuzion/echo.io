@@ -1,31 +1,26 @@
 {
   "name": "echo.io",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "An echo server for Node that uses Socket.io and saves message history.",
-  "main": "./lib/index.js",
-  "scripts": {
-    "test": "mocha --reporter spec"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/tonypujals/echo.io.git"
-  },
+  "author": "Tony Pujals (http://twitter.com/subfuzion)",
+  "license": "MIT",
+  "homepage": "https://github.com/subfuzion/echo.io",
+  "repository": "github:subfuzion/echo.io",
   "keywords": [
     "echo",
     "websocket",
     "socket.io"
   ],
-  "author": "Tony Pujals <tony@subfuzion.com> (http://twitter.com/subfuzion)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/tonypujals/echo.io/issues"
+  "bugs": "https://github.com/subfuzion/echo.io/issues",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "mocha --reporter spec"
   },
-  "homepage": "https://github.com/tonypujals/echo.io",
   "devDependencies": {
-    "mocha": "~1.17.1",
-    "underscore": "~1.6.0"
+    "mocha": "^6.2.3",
+    "underscore": "^1.13.4"
   },
   "dependencies": {
-    "ws": "~0.4.31"
+    "ws": "^8.8.1"
   }
 }
